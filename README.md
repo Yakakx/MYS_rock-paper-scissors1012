@@ -2,7 +2,7 @@
 ### Team name: MYS
 ### Project title: Rock-paper-scissors Game Website
 ### Team members:
-* Kai-An Yang, kevin357@my.yorku.ca, Section A Lab03
+* Kai-An Yang, kevin357@my.yorku.ca, Section A Lab 03
 * Guanyu Shi, s99999@my.yorku.ca, Section A Lab 03
 * Weiye Mao, wayne13@my.yorku.ca, Section A Lab 04
 ### Description:
