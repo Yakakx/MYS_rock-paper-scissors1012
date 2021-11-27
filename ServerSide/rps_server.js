@@ -32,12 +32,11 @@ app.post('/post', (req, res) => {
         human_win[nameID] = 0;
         ai_win[nameID] = 0;
         jsontext = JSON.stringify({
-            'action': 'generateCode',
+            'action': 'startGame',
             'nameID': nameID,
-            'msg': 'New code generated!!!'
+            'msg': 'Game start!'
         });
         console.log(jsontext);
-        console.log(codes);
         // send the response while including the JSON text
         res.send(jsontext)
     } else if (z['action'] === "evaluate") {
@@ -115,9 +114,9 @@ function evaluate(human_move, ai_move) {
 function generateMove(clientName) {
 
     var epsilon = Math.random();
-    var length = play_history_length[name];
-    var history = play_history[name];
-    var index = player_history_index[name] - 1;
+    var length = play_history_length[clientName];
+    var history = play_history[clientName];
+    var index = player_history_index[clientName] - 1;
 
     // explore a random move with 20% chance, or not play for more than 3 games
     if (epsilon < greedy_threshould || length < 4){
@@ -279,17 +278,31 @@ function generateMove(clientName) {
     if (p_paper > p_scissor)
         move = 'Paper';
 
-    return move;
+    if (move === 'Rock')
+        return 'Paper';
+
+    if (move === 'Paper')
+        return 'Scissor';
+
+    if (move === 'Scissor')
+        return 'Rock';
 
 }
 
+/**
+ * Collect game play history
+ * @param human_move
+ * @param ai_move
+ * @param result
+ * @param name
+ */
 function collect(human_move, ai_move, result, name) {
 
     var length = play_history_length[name];
     var index = player_history_index[name];
 
     if (length < queue_length){
-        play_history[name].append([human_move, ai_move, result]);
+        play_history[name].push([human_move, ai_move, result]);
         play_history_length[name] += 1;
         player_history_index[name] += 1;
     }
@@ -299,4 +312,13 @@ function collect(human_move, ai_move, result, name) {
         if (player_history_index[name] > queue_length)
             player_history_index[name] = 1;
     }
+
+    total_game_played[name] += 1;
+    if (result === 'win'){
+        human_win[name] += 1;
+    }
+    if (result === 'lose'){
+        ai_win[name] += 1;
+    }
+
 }
